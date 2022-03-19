@@ -1,7 +1,6 @@
 package com.fc.invoicing.controllers;
 
 import com.fc.invoicing.dto.CompanyDto;
-import com.fc.invoicing.model.Company;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.UUID;

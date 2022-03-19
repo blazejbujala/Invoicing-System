@@ -29,7 +29,6 @@ public class InvoiceController implements InvoiceApi {
         return ResponseEntity.ok(invoiceService.getAll());
     }
 
-
     public ResponseEntity<List<InvoiceListDto>> getList() {
         log.debug("Getting list of all invoices");
         return ResponseEntity.ok()

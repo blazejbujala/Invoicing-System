@@ -2,7 +2,6 @@ package com.fc.invoicing.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
-import javax.persistence.Column;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

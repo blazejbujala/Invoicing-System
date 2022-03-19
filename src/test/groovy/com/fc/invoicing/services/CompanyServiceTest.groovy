@@ -18,9 +18,11 @@ class CompanyServiceTest extends Specification{
         def company2 = TestHelpers.company(2)
         def company3 = TestHelpers.company(3)
         def updatedCompany = TestHelpers.company(4)
-        def updatedCompanyDto = companyMapper.toDto(updatedCompany)
-        def companyDto = new CompanyDto (company.getCompanyId(), company.getTaxIdentificationNumber(), company.getName(), company.getAddress(),
-                 company.getPensionInsurance(), company.getHealthInsurance())
+        def updatedCompanyDto = new CompanyDto(updatedCompany.getCompanyId(),updatedCompany.getTaxIdentificationNumber(),
+                updatedCompany.getName(), updatedCompany.getAddress(),
+                updatedCompany.getPensionInsurance(), updatedCompany.getHealthInsurance())
+        def companyDto = new CompanyDto (company.getCompanyId(), company.getTaxIdentificationNumber(), company.getName(),
+                company.getAddress(), company.getPensionInsurance(), company.getHealthInsurance())
 
 
         def "should add company to database"() {
@@ -40,6 +42,7 @@ class CompanyServiceTest extends Specification{
         def "should get company from database by Id"() {
             setup:
             jpaCompanyRepository.findById(company.getCompanyId()) >> Optional.of(company)
+            companyMapper.toDto(company) >> companyDto
 
             when:
             def result = companyService.getById(company.getCompanyId())
@@ -72,8 +75,8 @@ class CompanyServiceTest extends Specification{
             def result = companyService.update(company.getCompanyId(), updatedCompanyDto)
 
             then:
-            companyService.getById(result.getCompanyId()) != null
-            companyService.getById(result.getCompanyId()).getName() == "Company 4"
+            result.getCompanyId() != null
+            result.getName() == "4 Company"
         }
 
         def "should delete company from database"() {

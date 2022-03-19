@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class InvoiceService implements Database<Invoice> {
 
@@ -62,12 +62,12 @@ public class InvoiceService implements Database<Invoice> {
             jpaInvoiceRepository.deleteById(id);
             return true;
         } else {
-            return false;
+            throw new ItemNotFoundExemption("No invoice with id: " + id);
         }
     }
 
-        @Override
-        public void clear () {
-            jpaInvoiceRepository.deleteAll();
-        }
+    @Override
+    public void clear() {
+        jpaInvoiceRepository.deleteAll();
     }
+}

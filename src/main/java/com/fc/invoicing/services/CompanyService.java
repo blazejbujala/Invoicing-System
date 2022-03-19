@@ -22,7 +22,6 @@ public class CompanyService implements Database<CompanyDto> {
     private final CompanyListMapper companyListMapper;
     private final CompanyMapper companyMapper;
 
-
     @Override
     public CompanyDto add(CompanyDto company) {
         company.setCompanyId(UUID.randomUUID());
@@ -60,8 +59,9 @@ public class CompanyService implements Database<CompanyDto> {
         if (jpaCompanyRepository.findById(id).isPresent()) {
             jpaCompanyRepository.deleteById(id);
             return true;
+        } else {
+            throw new ItemNotFoundExemption("No company with id: " + id);
         }
-        return false;
     }
 
     @Override
