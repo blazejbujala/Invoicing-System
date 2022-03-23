@@ -1,7 +1,6 @@
 package com.fc.invoicing.services;
 
-import com.fc.invoicing.db.Database;
-import com.fc.invoicing.db.JpaCompanyRepository;
+import com.fc.invoicing.db.CompanyRepository;
 import com.fc.invoicing.dto.CompanyDto;
 import com.fc.invoicing.dto.mappers.CompanyListMapper;
 import com.fc.invoicing.dto.mappers.CompanyMapper;
@@ -12,60 +11,51 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
-public class CompanyService implements Database<CompanyDto> {
+public class CompanyService {
 
-    private final JpaCompanyRepository jpaCompanyRepository;
+    private final CompanyRepository companyRepository;
     private final CompanyListMapper companyListMapper;
     private final CompanyMapper companyMapper;
 
-    @Override
     public CompanyDto add(CompanyDto company) {
         company.setCompanyId(UUID.randomUUID());
-        return companyMapper.toDto(jpaCompanyRepository.save(companyMapper.toEntity(company)));
+        return companyMapper.toDto(companyRepository.save(companyMapper.toEntity(company)));
     }
 
-    @Override
     public CompanyDto getById(UUID id) {
-        if (jpaCompanyRepository.findById(id).isPresent()) {
-            return companyMapper.toDto(jpaCompanyRepository.findById(id).get());
-        } else {
-            throw new ItemNotFoundExemption("No company with id: " + id);
-        }
+        return companyMapper.toDto(companyRepository.findById(id).orElseThrow(() -> new ItemNotFoundExemption("No company with id: " + id)));
     }
 
-    @Override
     public List<CompanyDto> getAll() {
         List<Company> companyList = new ArrayList<>();
-        jpaCompanyRepository.findAll().forEach(companyList::add);
+        companyRepository.findAll().forEach(companyList::add);
         return companyList.stream().map(companyMapper::toDto).collect(Collectors.toList());
     }
 
-    @Override
     public CompanyDto update(UUID id, CompanyDto updatedCompany) {
-        if (jpaCompanyRepository.findById(id).isPresent()) {
+        if (companyRepository.findById(id).isPresent()) {
             updatedCompany.setCompanyId(id);
-            return companyMapper.toDto(jpaCompanyRepository.save(companyMapper.toEntity(updatedCompany)));
+            return companyMapper.toDto(companyRepository.save(companyMapper.toEntity(updatedCompany)));
         } else {
             throw new ItemNotFoundExemption("No company with id: " + id + " please add new company");
         }
     }
 
-    @Override
     public boolean delete(UUID id) {
-        if (jpaCompanyRepository.findById(id).isPresent()) {
-            jpaCompanyRepository.deleteById(id);
-            return true;
-        } else {
+        try {
+            companyRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
             throw new ItemNotFoundExemption("No company with id: " + id);
         }
+        return true;
     }
 
-    @Override
     public void clear() {
-        jpaCompanyRepository.deleteAll();
+        companyRepository.deleteAll();
     }
 }

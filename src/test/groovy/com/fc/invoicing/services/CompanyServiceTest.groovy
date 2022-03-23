@@ -1,6 +1,6 @@
 package com.fc.invoicing.services
 
-import com.fc.invoicing.db.JpaCompanyRepository
+import com.fc.invoicing.db.CompanyRepository
 import com.fc.invoicing.dto.CompanyDto
 import com.fc.invoicing.dto.mappers.CompanyListMapper
 import com.fc.invoicing.dto.mappers.CompanyMapper
@@ -9,11 +9,11 @@ import spock.lang.Specification
 
 class CompanyServiceTest extends Specification{
 
-        JpaCompanyRepository jpaCompanyRepository = Mock()
+        CompanyRepository companyRepository = Mock()
         CompanyListMapper companyListMapper = Mock()
         CompanyMapper companyMapper = Mock()
 
-        def companyService = new CompanyService(jpaCompanyRepository, companyListMapper, companyMapper)
+        def companyService = new CompanyService(companyRepository, companyListMapper, companyMapper)
         def company = TestHelpers.company(1)
         def company2 = TestHelpers.company(2)
         def company3 = TestHelpers.company(3)
@@ -28,9 +28,9 @@ class CompanyServiceTest extends Specification{
         def "should add company to database"() {
             setup:
             companyMapper.toEntity(companyDto) >> company
-            jpaCompanyRepository.save(company) >> company
+            companyRepository.save(company) >> company
             companyMapper.toDto(company) >> companyDto
-            jpaCompanyRepository.findById(company.getCompanyId()) >> Optional.of(company)
+            companyRepository.findById(company.getCompanyId()) >> Optional.of(company)
 
             when:
             def result = companyService.add(companyDto)
@@ -41,7 +41,7 @@ class CompanyServiceTest extends Specification{
 
         def "should get company from database by Id"() {
             setup:
-            jpaCompanyRepository.findById(company.getCompanyId()) >> Optional.of(company)
+            companyRepository.findById(company.getCompanyId()) >> Optional.of(company)
             companyMapper.toDto(company) >> companyDto
 
             when:
@@ -54,7 +54,7 @@ class CompanyServiceTest extends Specification{
 
         def "should get list of all companies from database"() {
             setup:
-            jpaCompanyRepository.findAll() >> [company, company2, company3]
+            companyRepository.findAll() >> [company, company2, company3]
 
             when:
             def result = companyService.getAll()
@@ -67,8 +67,8 @@ class CompanyServiceTest extends Specification{
             setup:
             updatedCompany.setCompanyId(company.getCompanyId())
             companyMapper.toEntity(updatedCompanyDto) >> updatedCompany
-            jpaCompanyRepository.findById(updatedCompany.getCompanyId()) >> Optional.of(updatedCompany)
-            jpaCompanyRepository.save(updatedCompany) >> updatedCompany
+            companyRepository.findById(updatedCompany.getCompanyId()) >> Optional.of(updatedCompany)
+            companyRepository.save(updatedCompany) >> updatedCompany
             companyMapper.toDto(updatedCompany) >> updatedCompanyDto
 
             when:
@@ -81,8 +81,8 @@ class CompanyServiceTest extends Specification{
 
         def "should delete company from database"() {
             setup:
-            jpaCompanyRepository.findById(company.getCompanyId()) >> Optional.of(company)
-            jpaCompanyRepository.findAll() >> []
+            companyRepository.findById(company.getCompanyId()) >> Optional.of(company)
+            companyRepository.findAll() >> []
 
             when:
             def result = companyService.delete(company.getCompanyId())

@@ -33,15 +33,15 @@ class InvoiceControllerTest extends Specification {
     private JsonService<Invoice[]> jsonListService
 
     @Autowired
-    private InvoiceService jpaInvoiceRepository
+    private InvoiceService invoiceRepository
 
     @Shared
     def invoice1 = TestHelpers.invoice(1)
     def invoice2 = TestHelpers.invoice(2)
     def invoice3 = TestHelpers.invoice(3)
 
-    def setup() { jpaInvoiceRepository.clear() }
-    def cleanup() { jpaInvoiceRepository.clear() }
+    def setup() { invoiceRepository.clear() }
+    def cleanup() { invoiceRepository.clear() }
 
     def "should get empty list"() {
         given:

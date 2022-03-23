@@ -1,13 +1,8 @@
 package com.fc.invoicing.controllers
 
-import com.fc.invoicing.db.JpaCompanyRepository
+
 import com.fc.invoicing.dto.CompanyDto
-import com.fc.invoicing.dto.mappers.CompanyListMapper
-import com.fc.invoicing.dto.mappers.CompanyMapper
-import com.fc.invoicing.model.Company
-import com.fc.invoicing.model.Invoice
 import com.fc.invoicing.services.CompanyService
-import com.fc.invoicing.services.InvoiceService
 import com.fc.invoicing.services.JsonService
 import com.fc.invoicing.testHelpers.TestHelpers
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,10 +34,10 @@ class CompanyControllerTest extends Specification {
     private JsonService<CompanyDto[]> jsonListService
 
     @Autowired
-    private CompanyService jpaCompanyRepository
+    private CompanyService companyRepository
 
-    def setup() { jpaCompanyRepository.clear() }
-    def cleanup() { jpaCompanyRepository.clear() }
+    def setup() { companyRepository.clear() }
+    def cleanup() { companyRepository.clear() }
 
     @Shared
     def company = TestHelpers.company(1)

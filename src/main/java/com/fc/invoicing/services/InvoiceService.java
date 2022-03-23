@@ -1,7 +1,6 @@
 package com.fc.invoicing.services;
 
-import com.fc.invoicing.db.Database;
-import com.fc.invoicing.db.JpaInvoiceRepository;
+import com.fc.invoicing.db.InvoiceRepository;
 import com.fc.invoicing.dto.InvoiceListDto;
 import com.fc.invoicing.dto.mappers.InvoiceListMapper;
 import com.fc.invoicing.exeptions.handlers.ItemNotFoundExemption;
@@ -11,34 +10,28 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class InvoiceService implements Database<Invoice> {
+public class InvoiceService {
 
-    private final JpaInvoiceRepository jpaInvoiceRepository;
+    private final InvoiceRepository invoiceRepository;
     private final InvoiceListMapper invoiceListMapper;
 
-    @Override
     public Invoice add(Invoice invoice) {
         invoice.setInvoiceId(UUID.randomUUID());
-        return jpaInvoiceRepository.save(invoice);
+        return invoiceRepository.save(invoice);
     }
 
-    @Override
     public Invoice getById(UUID id) {
-        if (jpaInvoiceRepository.findById(id).isPresent()) {
-            return jpaInvoiceRepository.findById(id).get();
-        } else {
-            throw new ItemNotFoundExemption("No invoice with id: " + id);
-        }
+        return invoiceRepository.findById(id).orElseThrow(() -> new ItemNotFoundExemption("No invoice with id: " + id));
     }
 
-    @Override
     public List<Invoice> getAll() {
         return StreamSupport
-            .stream(jpaInvoiceRepository.findAll().spliterator(), false)
+            .stream(invoiceRepository.findAll().spliterator(), false)
             .collect(Collectors.toList());
     }
 
@@ -46,28 +39,25 @@ public class InvoiceService implements Database<Invoice> {
         return getAll().stream().map(invoiceListMapper::invoiceListToDto).collect(Collectors.toList());
     }
 
-    @Override
     public Invoice update(UUID id, Invoice updatedInvoice) {
-        if (jpaInvoiceRepository.findById(id).isPresent()) {
+        if (invoiceRepository.findById(id).isPresent()) {
             updatedInvoice.setInvoiceId(id);
-            return jpaInvoiceRepository.save(updatedInvoice);
+            return invoiceRepository.save(updatedInvoice);
         } else {
             throw new ItemNotFoundExemption("No invoice with id: " + id + " please add new invoice");
         }
     }
 
-    @Override
     public boolean delete(UUID id) {
-        if (jpaInvoiceRepository.findById(id).isPresent()) {
-            jpaInvoiceRepository.deleteById(id);
-            return true;
-        } else {
+        try {
+            invoiceRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
             throw new ItemNotFoundExemption("No invoice with id: " + id);
         }
+        return true;
     }
 
-    @Override
     public void clear() {
-        jpaInvoiceRepository.deleteAll();
+        invoiceRepository.deleteAll();
     }
 }

@@ -1,6 +1,6 @@
 package com.fc.invoicing.services
 
-import com.fc.invoicing.db.JpaInvoiceRepository
+import com.fc.invoicing.db.InvoiceRepository
 import com.fc.invoicing.dto.mappers.InvoiceListMapper
 import com.fc.invoicing.model.Company
 import com.fc.invoicing.model.Invoice
@@ -12,10 +12,10 @@ import java.time.LocalDate
 
 class InvoiceServiceTest extends Specification {
 
-    JpaInvoiceRepository jpaInvoiceRepository = Mock()
+    InvoiceRepository invoiceRepository = Mock()
     InvoiceListMapper invoiceListMapper = Mock()
 
-    def invoiceService = new InvoiceService(jpaInvoiceRepository, invoiceListMapper)
+    def invoiceService = new InvoiceService(invoiceRepository, invoiceListMapper)
     def issuer = new Company("333-44-55-321", "Forbs", "ul. Jukowska 15/5, 14-666 Wisla",BigDecimal.valueOf(10.00), BigDecimal.valueOf(70.00))
     def issuer2 = new Company("111-11-11-111", "Slup", "ul.Debowa 12, 10-333 Gostyn", BigDecimal.valueOf(10.00), BigDecimal.valueOf(20.15))
     def receiver = new Company("586-10-44-999", "Mare", "ul.Bukowska 14, 11-333 Gostyn", BigDecimal.valueOf(20.00), BigDecimal.valueOf(40.00))
@@ -33,8 +33,8 @@ class InvoiceServiceTest extends Specification {
 
     def "should add new invoice to the repository"() {
         given:
-        jpaInvoiceRepository.save(invoice) >> invoice
-        jpaInvoiceRepository.findById(invoice.getInvoiceId()) >> Optional.of(invoice)
+        invoiceRepository.save(invoice) >> invoice
+        invoiceRepository.findById(invoice.getInvoiceId()) >> Optional.of(invoice)
 
         when:
         def result = invoiceService.add(invoice)
@@ -46,8 +46,8 @@ class InvoiceServiceTest extends Specification {
 
     def "should get invoice from repository by id"() {
         given:
-        jpaInvoiceRepository.save(invoice) >> invoice
-        jpaInvoiceRepository.findById(invoice.getInvoiceId()) >> Optional.of(invoice)
+        invoiceRepository.save(invoice) >> invoice
+        invoiceRepository.findById(invoice.getInvoiceId()) >> Optional.of(invoice)
 
         when:
         def result = invoiceService.getById(invoice.getInvoiceId())
@@ -58,7 +58,7 @@ class InvoiceServiceTest extends Specification {
 
     def "should get list of invoices from repository"() {
         given:
-        jpaInvoiceRepository.findAll() >> [invoice, invoice2]
+        invoiceRepository.findAll() >> [invoice, invoice2]
 
         when:
         def result = invoiceService.getAll()
@@ -69,7 +69,7 @@ class InvoiceServiceTest extends Specification {
 
     def "should get short list of invoices from repository"() {
         given:
-        jpaInvoiceRepository.findAll() >> [invoice, invoice2]
+        invoiceRepository.findAll() >> [invoice, invoice2]
 
         when:
         def result = invoiceService.getList()
@@ -80,8 +80,8 @@ class InvoiceServiceTest extends Specification {
 
     def "should update invoice in the repository"() {
         given:
-        jpaInvoiceRepository.save(invoice2) >> invoice2
-        jpaInvoiceRepository.findById(invoice.getInvoiceId()) >> Optional.of(invoice2)
+        invoiceRepository.save(invoice2) >> invoice2
+        invoiceRepository.findById(invoice.getInvoiceId()) >> Optional.of(invoice2)
         invoice2.setInvoiceId(invoice.getInvoiceId())
 
         when:
@@ -93,9 +93,9 @@ class InvoiceServiceTest extends Specification {
 
     def "should delete invoice form the repository"() {
         given:
-        jpaInvoiceRepository.findById(invoice.getInvoiceId()) >> Optional.of(invoice)
-        jpaInvoiceRepository.deleteById(invoice.getInvoiceId())
-        jpaInvoiceRepository.findAll() >> []
+        invoiceRepository.findById(invoice.getInvoiceId()) >> Optional.of(invoice)
+        invoiceRepository.deleteById(invoice.getInvoiceId())
+        invoiceRepository.findAll() >> []
 
         when:
         def result = invoiceService.delete(invoice.getInvoiceId())
