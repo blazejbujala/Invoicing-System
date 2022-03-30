@@ -1,0 +1,69 @@
+<br><h3>Tax report of {{company.name}}</h3><br>
+
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Position</th>
+    <th>Value</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td> Income tax :</td>
+    <td>{{taxReport.incomingVat}}</td>
+  </tr>
+  <tr>
+    <td>Outcome tax :</td>
+    <td>{{taxReport.outgoingVat}}</td>
+  </tr>
+  <tr>
+    <td>Vat to pay :</td>
+    <td>{{taxReport.vatToPay}}</td>
+  </tr>
+  <tr>
+    <td>Income :</td>
+    <td>{{taxReport.income}}</td>
+  </tr>
+  <tr>
+    <td>Costs :</td>
+    <td>{{taxReport.costs}}</td>
+  </tr>
+  <tr>
+    <td>Earnings :</td>
+    <td>{{taxReport.earnings}}</td>
+  </tr>
+  <tr>
+    <td>Pension insurance :</td>
+    <td>{{taxReport.pensionInsurance}}</td>
+  </tr>
+  <tr>
+    <td>Tax base :</td>
+    <td>{{taxReport.taxBase}}</td>
+  </tr>
+  <tr>
+    <td>Tax base rounded :</td>
+    <td>{{taxReport.taxBaseRounded}}</td>
+  </tr>
+  <tr>
+    <td>Income tax :</td>
+    <td>{{taxReport.incomeTax}}</td>
+  </tr>
+  <tr>
+    <td>9% of health insurance :</td>
+    <td>{{taxReport.healthInsuranceNinePercent}}</td>
+  </tr>
+  <tr>
+    <td>7,75% of health insurance :</td>
+    <td>{{taxReport.healthInsuranceSevenAndSeventyFivePercent}}</td>
+  </tr>
+  <tr>
+    <td>Income tax reduced by health insurance :</td>
+    <td>{{taxReport.incomeTaxReducedByHealthInsurance}}</td>
+  </tr>
+  <tr>
+    <td>Final income tax value :</td>
+    <td>{{taxReport.finalIncomeTaxValue}}</td>
+  </tr>
+  </tbody>
+</table>

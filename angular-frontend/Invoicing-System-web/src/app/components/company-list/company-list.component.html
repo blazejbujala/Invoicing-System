@@ -1,0 +1,22 @@
+<div class="wrapper">
+  <button class="btn btn-primary" (click)="navigateToAddForm()">Add New Company</button>
+</div>
+
+<table class="table table-hover table-striped">
+  <thead>
+  <tr>
+    <th scope="col">Tax Identification Number</th>
+    <th scope="col">Name</th>
+    <th scope="col">Address</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <tr *ngFor="let company of companies" (click)="navigateToPreview(company.companyId)">
+    <td class="align-middle">{{company.taxIdentificationNumber}}</td>
+    <td class="align-middle">{{company.name}}</td>
+    <td class="align-middle">{{company.address}}</td>
+    <td class="text-center">
+  </tr>
+  </tbody>
+</table>

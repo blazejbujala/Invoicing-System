@@ -1,0 +1,18 @@
+table {
+  &.table-hover {
+    tbody {
+      tr {
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  padding: 10px 0 0 20px;
+}
