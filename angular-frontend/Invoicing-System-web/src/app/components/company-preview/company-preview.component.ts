@@ -4,7 +4,6 @@ import {CompanyService} from "../../services/company.service";
 import {ToastrService} from "ngx-toastr";
 import {CompanyDto} from "../../model/company.dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {TaxReportModel} from "../../model/TaxReportModel";
 
 @Component({
   selector: 'app-company-preview',
@@ -43,7 +42,8 @@ export class CompanyPreviewComponent implements OnInit {
 
     if (this.id != null) {
       this.companyService.get(this.id).subscribe(data => {
-        this.companyUpdateFormGroup.patchValue(data)
+        this.company = data
+        this.companyUpdateFormGroup.patchValue({...data})
       }, error => {
         this.toastService.error("Something went wrong")
       })
@@ -76,7 +76,6 @@ export class CompanyPreviewComponent implements OnInit {
   }
 
   navigateToTaxReport(id: string) {
-    this.router.navigate(['tax', id])
+    this.router.navigate(['tax', this.id])
   }
-
 }
