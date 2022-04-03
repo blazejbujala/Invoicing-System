@@ -1,19 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {CompanyService} from "../../services/company.service";
-import {Router} from "@angular/router";
-import {ToastrService} from "ngx-toastr";
-import {InvoiceService} from "../../services/invoice.service";
+import {InvoiceEntryModel} from "../../model/InvoiceEntryModel";
 import {CompanyDto} from "../../model/company.dto";
 import {InvoiceModel} from "../../model/InvoiceModel";
-import {InvoiceEntryModel} from "../../model/InvoiceEntryModel";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {CompanyService} from "../../services/company.service";
+import {InvoiceService} from "../../services/invoice.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
-  selector: 'app-invoice-add',
-  templateUrl: './invoice-add.component.html',
-  styleUrls: ['./invoice-add.component.scss']
+  selector: 'app-invoice-edit',
+  templateUrl: './invoice-edit.component.html',
+  styleUrls: ['./invoice-edit.component.scss']
 })
-export class InvoiceAddComponent implements OnInit {
+export class InvoiceEditComponent implements OnInit {
 
   invoiceId: string | null
 
@@ -61,11 +61,11 @@ export class InvoiceAddComponent implements OnInit {
   selectedReceiver: string = ''
   selectedVatRate: string = ''
   companies: Array<CompanyDto> = []
-  invoiceAddForm: FormGroup;
+  invoiceEditForm: FormGroup;
   entriesForm: FormGroup;
 
 
-  constructor(private companyService: CompanyService, private invoiceService: InvoiceService, private formBuilder: FormBuilder, private router: Router,
+  constructor(private activatedRoute: ActivatedRoute, private companyService: CompanyService, private invoiceService: InvoiceService, private formBuilder: FormBuilder, private router: Router,
               private toastService: ToastrService) {
     this.invoiceId = ''
 
@@ -80,7 +80,7 @@ export class InvoiceAddComponent implements OnInit {
       }
     )
 
-    this.invoiceAddForm = this.formBuilder.group(
+    this.invoiceEditForm = this.formBuilder.group(
       {
         invoiceNumber: ['', [Validators.required]],
         dateOfIssue: ['', [Validators.required]],
@@ -91,6 +91,17 @@ export class InvoiceAddComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.invoiceId = this.activatedRoute.snapshot.paramMap.get('id')
+    if (this.invoiceId != null) {
+      this.invoiceService.get(this.invoiceId).subscribe(data => {
+        this.invoice = data
+        this.invoiceEditForm.patchValue({...data})
+      }, error => {
+        this.toastService.error("Something went wrong")
+      })
+    }
+    {
+    }
     this.companyService.getCompanyList().subscribe(data => {
         this.companies = data
       },
@@ -122,12 +133,12 @@ export class InvoiceAddComponent implements OnInit {
       )
   }
 
-  save(): void {
-    this.invoice.dateOfIssue = this.invoiceAddForm.controls['dateOfIssue'].value
-    this.invoice.invoiceNumber = this.invoiceAddForm.controls['invoiceNumber'].value
-    this.invoiceService.save(this.invoice).subscribe(() => {
-          this.toastService.success("Invoice added");
-          this.router.navigate(['invoices'])
+  update(): void {
+    this.invoice.dateOfIssue = this.invoiceEditForm.controls['dateOfIssue'].value
+    this.invoice.invoiceNumber = this.invoiceEditForm.controls['invoiceNumber'].value
+    this.invoiceService.update(this.invoice.invoiceId, this.invoice).subscribe(() => {
+        this.toastService.success("Invoice updated");
+        this.router.navigate(['invoices'])
       },
       error => {
         console.log(error)
@@ -150,6 +161,5 @@ export class InvoiceAddComponent implements OnInit {
   cancel() {
     this.router.navigate(['invoices'])
   }
-
 
 }

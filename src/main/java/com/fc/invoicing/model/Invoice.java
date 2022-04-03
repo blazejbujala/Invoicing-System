@@ -11,8 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,17 +37,17 @@ public class Invoice {
     @Schema(name = "dateOfIssue", example = "2022-01-01", required = true)
     private LocalDate dateOfIssue;
 
-    @OneToOne (cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "issuerId")
     @Schema(name = "issuer", required = true)
     private Company issuer;
 
-    @OneToOne (cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "receiverId")
     @Schema(name = "receiver", required = true)
     private Company receiver;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name = "invoiceId")
     @Schema(name = "entries", required = true)
     private List<InvoiceEntry> entries;

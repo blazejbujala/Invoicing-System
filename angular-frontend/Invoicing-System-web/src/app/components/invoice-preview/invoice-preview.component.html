@@ -2,7 +2,6 @@
 
 <br>
 <b>Invoice Number :</b> {{invoice.invoiceNumber}}<br><br>
-
 <b>Date of Issue :</b>  {{invoice.dateOfIssue}}<br><br>
 
 <b>Issuer :</b><br>
@@ -22,24 +21,28 @@ Tax Identification Number : <br>
 <table class="table table-hover table-striped">
   <thead>
   <tr>
+    <th>No.</th>
     <th scope="col">Description</th>
     <th scope="col">Price</th>
     <th scope="col">Quantity</th>
-    <th scope="col">Total Price</th>
+    <th scope="col">Total Net Price</th>
     <th scope="col">Vat Rate</th>
     <th scope="col">Vat Value</th>
+    <th scope="col">Total Gross Price</th>
     <th scope="col">Car Registration Number</th>
     <th scope="col">Personal Car Use</th>
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let invoiceEntry of invoice.entries">
+  <tr *ngFor="let invoiceEntry of invoice.entries, let i = index">
+    <td class="align-middle">{{i + 1}}</td>
     <td class="align-middle">{{invoiceEntry.description}}</td>
     <td class="align-middle">{{invoiceEntry.price}}</td>
     <td class="align-middle">{{invoiceEntry.quantity}}</td>
     <td class="align-middle">{{invoiceEntry.totalPrice}}</td>
     <td class="align-middle">{{invoiceEntry.vatRate}}</td>
     <td class="align-middle">{{invoiceEntry.vatValue}}</td>
+    <td class="align-middle">{{invoiceEntry.totalGrossPrice}}</td>
     <td class="align-middle">{{invoiceEntry.carRegNo}}</td>
     <td class="align-middle">{{invoiceEntry.personalUseCar}}</td>
     <td class="text-center">
@@ -47,5 +50,5 @@ Tax Identification Number : <br>
   </tbody>
 </table>
 <button class="btn btn-outline-danger" (click)="delete(invoice.invoiceId)">Delete invoice</button>
-<button class="btn btn-primary">Edit</button>
-<button class="btn btn-success" (click)="navigateToInvoiceList()">Go back</button>
+<button class="btn btn-outline-primary" (click)="navigateToInvoiceEdit(invoice.invoiceId)">Edit</button>
+<button class="btn btn-outline-success" (click)="navigateToInvoiceList()">Go back</button>

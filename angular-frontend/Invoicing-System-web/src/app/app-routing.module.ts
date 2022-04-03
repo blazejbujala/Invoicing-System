@@ -7,6 +7,7 @@ import {CompanyPreviewComponent} from "./components/company-preview/company-prev
 import {InvoicePreviewComponent} from "./components/invoice-preview/invoice-preview.component";
 import {CompanyTaxReportComponent} from "./components/company-tax-report/company-tax-report.component";
 import {InvoiceAddComponent} from "./components/invoice-add/invoice-add.component";
+import {InvoiceEditComponent} from "./components/invoice-edit/invoice-edit.component";
 
 const routes: Routes = [
   {
@@ -38,10 +39,13 @@ const routes: Routes = [
         component: InvoicePreviewComponent
       },
       {
+        path: 'edit/:id',
+        component: InvoiceEditComponent
+      },
+      {
         path: '',
         component: InvoicesListComponent
       }
-
     ]
   },
   {

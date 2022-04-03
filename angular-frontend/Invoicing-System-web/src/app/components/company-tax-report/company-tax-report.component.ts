@@ -63,4 +63,8 @@ export class CompanyTaxReportComponent implements OnInit {
       )
     }
   }
+  navigateToPreview() {
+    this.id = this.activatedRoute.snapshot.paramMap.get('id')
+    this.router.navigate(['companies', this.id])
+  }
 }

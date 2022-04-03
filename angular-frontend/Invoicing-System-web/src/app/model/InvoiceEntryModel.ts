@@ -8,6 +8,7 @@ export class InvoiceEntryModel {
     public totalPrice: number,
     public vatValue: number,
     public vatRate: string,
+    public totalGrossPrice: number,
     public carRegNo: string,
     public personalUseCar: boolean
   ){

@@ -7,7 +7,6 @@ import {InvoiceModel} from "../../model/InvoiceModel";
 import {CompanyDto} from "../../model/company.dto";
 import {InvoiceEntryModel} from "../../model/InvoiceEntryModel";
 
-
 @Component({
   selector: 'app-invoice-preview',
   templateUrl: './invoice-preview.component.html',
@@ -25,6 +24,7 @@ export class InvoicePreviewComponent implements OnInit {
     healthInsurance: 0,
     pensionInsurance: 0
   }
+
   receiver: CompanyDto = {
     companyId: '',
     taxIdentificationNumber: '',
@@ -75,5 +75,7 @@ export class InvoicePreviewComponent implements OnInit {
     this.router.navigate(['invoices'])
   }
 
-
+  navigateToInvoiceEdit(id: string){
+    this.router.navigate(['invoices/edit', id])
+  }
 }

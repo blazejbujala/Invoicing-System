@@ -42,6 +42,8 @@ public class InvoiceEntry {
     @Column(columnDefinition = "numeric(3, 2)")
     @Schema(name = "Tax rate", required = true)
     private Vat vatRate;
+    @Schema(name = "Product/service gross price", example = "11.39", required = true)
+    private BigDecimal totalGrossPrice;
     @Column(name = "car_registration_number")
     @Schema(name = "Car registration numbers", example = "WR 90090")
     private String carRegNo;
@@ -72,5 +74,6 @@ public class InvoiceEntry {
     public void calculateTotalPriceAndVatValue() {
         this.totalPrice = price.multiply(quantity).setScale(2, RoundingMode.HALF_UP);
         this.vatValue = totalPrice.multiply(new BigDecimal(Float.toString(vatRate.getRate()))).setScale(2, RoundingMode.HALF_UP);
+        this.totalGrossPrice = totalPrice.add(vatValue).setScale(2, RoundingMode.HALF_UP);
     }
 }

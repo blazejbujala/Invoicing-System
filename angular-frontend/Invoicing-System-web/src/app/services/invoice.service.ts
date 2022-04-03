@@ -20,16 +20,19 @@ export class InvoiceService {
     return this.httpClient.get<Array<InvoiceModel>>(`${commons.apiBasePath}${this.path}`)
   }
 
+  public save(item: InvoiceModel): Observable<InvoiceModel>{
+    return this.httpClient.post<InvoiceModel>(`${commons.apiBasePath}${this.path}`, item);
+  }
+
   public get(id: string): Observable<InvoiceModel> {
     return this.httpClient.get<InvoiceModel>(`${commons.apiBasePath}${this.path}/${id}`)
+  }
+
+  public update(id: string, item: InvoiceModel): Observable<InvoiceModel>{
+    return this.httpClient.patch<InvoiceModel>(`${commons.apiBasePath}${this.path}/${id}`, item)
   }
 
   public delete(id: string): Observable<any> {
     return this.httpClient.delete<void>(`${commons.apiBasePath}${this.path}/${id}`)
   }
-
-  public save(item: InvoiceModel): Observable<InvoiceModel> {
-    return this.httpClient.post<InvoiceModel>(`${commons.apiBasePath}${this.path}`, item);
-  }
-
 }
