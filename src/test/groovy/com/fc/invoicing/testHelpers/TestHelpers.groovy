@@ -28,6 +28,8 @@ class TestHelpers {
                 totalPrice: (BigDecimal.valueOf(100 * id) * BigDecimal.valueOf(id)),
                 vatValue: (BigDecimal.valueOf(100 * id) * BigDecimal.valueOf(id) * BigDecimal.valueOf(0.23)).setScale(2, RoundingMode.HALF_UP),
                 vatRate: Vat.VAT_23,
+                totalGrossPrice: (BigDecimal.valueOf(100 * id) * BigDecimal.valueOf(id) * BigDecimal.valueOf(0.23))
+                        .setScale(2, RoundingMode.HALF_UP) + (BigDecimal.valueOf(100 * id) * BigDecimal.valueOf(id)),
                 carRegNo: null,
                 personalUseCar: false,
         )
@@ -41,6 +43,8 @@ class TestHelpers {
                 totalPrice: (BigDecimal.valueOf(100 * id) * BigDecimal.valueOf(id)),
                 vatValue: (BigDecimal.valueOf(100 * id) * BigDecimal.valueOf(id) * BigDecimal.valueOf(0.23)).setScale(2, RoundingMode.HALF_UP),
                 vatRate: Vat.VAT_23,
+                totalGrossPrice: (BigDecimal.valueOf(100 * id) * BigDecimal.valueOf(id) * BigDecimal.valueOf(0.23))
+                        .setScale(2, RoundingMode.HALF_UP) + (BigDecimal.valueOf(100 * id) * BigDecimal.valueOf(id)),
                 carRegNo: "GO 1232$id",
                 personalUseCar: true,
         )

@@ -1,0 +1,21 @@
+<div class="wrapper">
+  <button class="btn btn-primary" (click)="navigateToAddForm()">Create New Invoice</button>
+</div>
+<table class="table table-hover table-striped">
+  <thead>
+  <tr>
+    <th scope="col">Invoice Id</th>
+    <th scope="col">Invoice Number</th>
+    <th scope="col">Date of Issue</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <tr *ngFor="let invoice of invoices" (click)="navigateToPreview(invoice.invoiceId)">
+    <td class="align-middle">{{invoice.invoiceId}}</td>
+    <td class="align-middle">{{invoice.invoiceNumber}}</td>
+    <td class="align-middle">{{invoice.dateOfIssue}}</td>
+    <td class="text-center">
+  </tr>
+  </tbody>
+</table>

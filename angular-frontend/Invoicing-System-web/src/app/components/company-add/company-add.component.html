@@ -1,0 +1,33 @@
+<form [formGroup]="companyAddFormGroup">
+  <div class="mb-3">
+    <label for="taxIdentificationNumber" class="form-label">Tax Identification Number</label><br>
+    <input type="text" id="taxIdentificationNumber" name="taxIdentificationNumber"
+           formControlName="taxIdentificationNumber">
+  </div>
+  <div class="mb-3">
+    <label for="name" class="form-label">Name of Company</label><br>
+    <input type="text" id="name" name="name" formControlName="name">
+  </div>
+  <div class="mb-3">
+    <label for="address" class="form-label">Company address</label><br>
+  <input type="text" id="address" name="address" formControlName="address">
+  </div>
+  <div class="mb-3">
+    <label for="healthInsurance" class="form-label">Health Insurance</label><br>
+  <input type="text" id="healthInsurance" name="healthInsurance" formControlName="healthInsurance"
+         aria-describedby="healthInsuranceHelp"><br>
+    <small id="healthInsuranceHelp" class="form-text text-muted">Pls use dot "." for example 100.12</small>
+  </div>
+  <div class="mb-3">
+    <label for="pensionInsurance" class="form-label">Pension Insurance</label><br>
+  <input type="text" id="pensionInsurance" name="pensionInsurance" formControlName="pensionInsurance"
+         aria-describedby="pensionInsuranceHelp"><br>
+    <small id="pensionInsuranceHelp" class="form-text text-muted">Pls use dot "." for example 100.12</small>
+  </div>
+  <button class="btn btn-success" (click)="save()">
+    Save
+  </button>
+  <button class="btn btn-danger" (click)="cancel()">
+    Cancel
+  </button>
+</form>

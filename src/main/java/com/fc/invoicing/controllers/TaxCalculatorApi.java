@@ -4,9 +4,11 @@ import com.fc.invoicing.model.Company;
 import com.fc.invoicing.model.CompanyTaxInformation;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@CrossOrigin
 public interface TaxCalculatorApi {
 
     @PostMapping

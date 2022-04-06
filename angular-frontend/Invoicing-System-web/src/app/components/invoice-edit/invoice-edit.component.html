@@ -1,0 +1,116 @@
+<h1 style="text-align: center">INVOICE</h1>
+<form [formGroup]="invoiceEditForm">
+  <br>
+  <b>Invoice Number :</b> <input type="text" id="invoiceNumber" name="invoiceNumber"
+                                 formControlName="invoiceNumber"><br><br>
+  <b>Date of Issue :</b> <input type="text" id="dateOfIssue" name="dateOfIssue"
+                                formControlName="dateOfIssue" aria-describedby="dateOfIssueHelp"><br>
+  <small id="dateOfIssueHelp" class="form-text text-muted">Date format : YYYY-MM-DD</small><br><br>
+
+  <div style="padding-right: 900px">
+    <b>Issuer :</b><br>
+    <select name="issuerId" [(ngModel)]="selectedIssuer" (ngModelChange)="updateIssuer(selectedIssuer)"
+            class="form-select"
+            aria-label="Select Issuer" formControlName="issuerId" type="text" id="issuerId">
+      <option value="" disabled>{{invoice.issuer.name}}</option>
+      <option *ngFor="let issuer of companies" [value]="issuer.companyId">
+        {{issuer.name}}
+      </option>
+    </select>
+  </div>
+  {{invoice.issuer.address}}<br>
+  Tax Identification Number : <br>
+  {{invoice.issuer.taxIdentificationNumber}}<br>
+
+  <div style="padding-left: 900px">
+    <b>Receiver :</b><br>
+    <select name="receiverId" [(ngModel)]="selectedReceiver" (ngModelChange)="updateReceiver(selectedReceiver)"
+            class="form-select"
+            aria-label="Select Receiver" formControlName="receiverId" type="text" id="receiverId">
+      <option value="" disabled>{{invoice.receiver.name}}</option>
+      <option *ngFor="let receiver of companies" [value]="receiver.companyId">
+        {{receiver.name}}
+      </option>
+    </select>
+    {{invoice.receiver.address}}<br>
+    Tax Identification Number :<br>
+    {{invoice.receiver.taxIdentificationNumber}}<br>
+  </div>
+  <br>
+</form>
+<form [formGroup]="entriesForm">
+<table class="table table-hover table-striped">
+  <thead>
+  <tr>
+    <th></th>
+    <th>No.</th>
+    <th scope="col">Description</th>
+    <th scope="col">Price</th>
+    <th scope="col">Quantity</th>
+    <th scope="col">Total Net Price</th>
+    <th scope="col">Vat Rate</th>
+    <th scope="col">Vat Value</th>
+    <th scope="col">Total Gross Price</th>
+    <th scope="col">Car Registration Number</th>
+    <th scope="col">Personal Car Use</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let invoiceEntry of invoice.entries, let i = index;">
+    <td style="text-align: center;">
+      <button type="button" class="btn btn-danger" (click)="deleteEntry(i)">
+        Delete
+      </button></td>
+    <td class="align-middle">{{i + 1}}</td>
+    <td class="align-middle">{{invoiceEntry.description}}</td>
+    <td class="align-middle">{{invoiceEntry.price}}</td>
+    <td class="align-middle">{{invoiceEntry.quantity}}</td>
+    <td class="align-middle">{{invoiceEntry.totalPrice}}</td>
+    <td class="align-middle">{{invoiceEntry.vatRate}}</td>
+    <td class="align-middle">{{invoiceEntry.vatValue}}</td>
+    <td class="align-middle">{{invoiceEntry.totalGrossPrice}}</td>
+    <td class="align-middle">{{invoiceEntry.carRegNo}}</td>
+    <td class="align-middle">{{invoiceEntry.personalUseCar}}</td>
+    <td class="text-center">
+  </tr>
+  <tr>
+    <td>
+      <button type="button" class="btn btn-dark" (click)="addEntry()">
+        Add
+      </button>
+    </td>
+    <td>
+    </td>
+    <td class="form-group"><input class="form-control" type="text" id="description" name="description"
+                                  formControlName="description"></td>
+    <td class="form-group"><input class="form-control" type="text" id="price" name="price"
+                                  formControlName="price"></td>
+    <td class="form-group"><input class="form-control" type="text" id="quantity" name="quantity"
+                                  formControlName="quantity"></td>
+    <td class="form-group">BLANK</td>
+    <td class="form-group"><select name="vatRate" [(ngModel)]="selectedVatRate"
+                                   class="form-select form-select-sm form-control"
+                                   aria-label="Select Vat Rate" formControlName="vatRate" type="text" id="vatRate">
+      <option value="VAT_0">VAT 0</option>
+      <option value="VAT_5">VAT 5</option>
+      <option value="VAT_8">VAT 8</option>
+      <option value="VAT_23">VAT 23</option>
+    </select>
+    </td>
+    <td class="form-group">BLANK</td>
+    <td class="form-group">BLANK</td>
+    <td class="form-group"><input class="form-control" type="text" id="carRegNo" name="carRegNo"
+                                  formControlName="carRegNo"></td>
+    <td class="form-group"><select name="personalUseCar"
+                                   class="form-select form-select-sm form-control"
+                                   formControlName="personalUseCar" type="text" id="personalUseCar">
+      <option value="true">TRUE</option>
+      <option value="false">FALSE</option>
+    </select>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<button class="btn btn-outline-primary" (click)="update()">Update</button>
+<button class="btn btn-outline-success" (click)="cancel()">Cancel</button>
+</form>
