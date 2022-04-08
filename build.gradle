@@ -9,6 +9,7 @@ buildscript {
 		springBootVersion = "2.6.3"
 		springDependencyManagementVersion = "1.0.11.RELEASE"
 		springFoxStarterVersion = '1.6.6'
+		springBootStarter = '2.6.6'
 	}
 }
 
@@ -37,9 +38,12 @@ dependencies {
 
 	implementation "org.flywaydb:flyway-core:${flywayVersion}"
 	implementation "org.springdoc:springdoc-openapi-ui:${springFoxStarterVersion}"
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.4'
-	implementation 'org.springframework.boot:spring-boot-starter-web:2.6.4'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.6.4'
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootStarter}"
+	implementation "org.springframework.boot:spring-boot-starter-web:${springBootStarter}"
+	implementation "org.springframework.boot:spring-boot-starter-jdbc:${springBootStarter}"
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
 	implementation "org.mapstruct:mapstruct:${mapStructVersion}"
 
 

@@ -9,17 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Shared
 import spock.lang.Specification
 
-
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
+@WithMockUser
 @SpringBootTest
 @AutoConfigureMockMvc
 class CompanyControllerTest extends Specification {
@@ -55,7 +57,7 @@ class CompanyControllerTest extends Specification {
         def expected = "[]"
 
         when:
-        def result = mockMvc.perform(get("/companies"))
+        def result = mockMvc.perform(get("/companies").with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -70,7 +72,8 @@ class CompanyControllerTest extends Specification {
         def companyDtoAsJson = jsonService.toJson(companyDto)
 
         when:
-        def result = mockMvc.perform(post("/companies").content(companyDtoAsJson).contentType(MediaType.APPLICATION_JSON_VALUE))
+        def result = mockMvc.perform(post("/companies")
+                .content(companyDtoAsJson).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -91,17 +94,17 @@ class CompanyControllerTest extends Specification {
         def companyDtoAsJson3 = jsonService.toJson(company3Dto)
 
         when:
-        mockMvc.perform(post("/companies").content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE))
-        def postedCompanyDto = mockMvc.perform(post("/companies").content(companyDtoAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/companies").content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        def postedCompanyDto = mockMvc.perform(post("/companies").content(companyDtoAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
-        mockMvc.perform(post("/companies").content(companyDtoAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/companies").content(companyDtoAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
         def addedCompany2 = jsonService.toObject(postedCompanyDto, CompanyDto.class)
         def id = addedCompany2.getCompanyId()
         company2Dto.setCompanyId(id)
-        def result = mockMvc.perform(get("/companies/" + id))
+        def result = mockMvc.perform(get("/companies/" + id).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -120,10 +123,10 @@ class CompanyControllerTest extends Specification {
         def companyDtoAsJson3 = jsonService.toJson(company3Dto)
 
         when:
-        mockMvc.perform(post("/companies").content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE))
-        mockMvc.perform(post("/companies").content(companyDtoAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE))
-        mockMvc.perform(post("/companies").content(companyDtoAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE))
-        def result = mockMvc.perform(get("/companies"))
+        mockMvc.perform(post("/companies").content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        mockMvc.perform(post("/companies").content(companyDtoAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        mockMvc.perform(post("/companies").content(companyDtoAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        def result = mockMvc.perform(get("/companies").with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -141,8 +144,8 @@ class CompanyControllerTest extends Specification {
         def companyDtoAsJson3 = jsonService.toJson(company3Dto)
 
         when:
-        mockMvc.perform(post("/companies").content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE))
-        def secondCompany = mockMvc.perform(post("/companies").content(companyDtoAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/companies").content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        def secondCompany = mockMvc.perform(post("/companies").content(companyDtoAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -150,9 +153,9 @@ class CompanyControllerTest extends Specification {
         def companyToBeDeleted = jsonService.toObject(secondCompany, CompanyDto.class)
         def id = companyToBeDeleted.getCompanyId()
         company2Dto.setCompanyId(id)
-        mockMvc.perform(post("/companies").content(companyDtoAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE))
-        mockMvc.perform(delete("/companies/" + id))
-        def response = mockMvc.perform(get("/companies"))
+        mockMvc.perform(post("/companies").content(companyDtoAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        mockMvc.perform(delete("/companies/" + id).with(csrf()))
+        def response = mockMvc.perform(get("/companies").with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -170,7 +173,7 @@ class CompanyControllerTest extends Specification {
 
         when:
         def postResponse = mockMvc.perform(
-                post("/companies").content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON))
+                post("/companies").content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON).with(csrf()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
@@ -179,14 +182,14 @@ class CompanyControllerTest extends Specification {
         companyDto.setCompanyId(id)
         UUID notInRepositoryId = UUID.randomUUID()
         def deleteResponse = mockMvc.perform(
-                delete("/companies/" + notInRepositoryId))
+                delete("/companies/" + notInRepositoryId).with(csrf()))
                 .andExpect(status().isNotFound())
                 .andReturn()
                 .response
                 .contentAsString
 
         def response = mockMvc.perform(
-                get("/companies"))
+                get("/companies").with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .response
@@ -206,14 +209,14 @@ class CompanyControllerTest extends Specification {
 
         when:
         def postedCompanyDto = mockMvc.perform(post("/companies")
-                .content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE))
+                .content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
         def id = jsonService.toObject(postedCompanyDto, CompanyDto.class).getCompanyId()
         def receivedBody = mockMvc.perform(patch("/companies/" + id)
-                .content(companyDtoAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE))
+                .content(companyDtoAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -232,11 +235,11 @@ class CompanyControllerTest extends Specification {
 
         when:
         def postResponse = mockMvc.perform(
-                post("/companies").content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON))
+                post("/companies").content(companyDtoAsJson1).contentType(MediaType.APPLICATION_JSON).with(csrf()))
                 .andExpect(status().isOk())
         UUID updatedId = UUID.randomUUID()
         def respond = mockMvc.perform(patch("/companies/" + updatedId)
-                .content(companyDtoAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE))
+                .content(companyDtoAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isNotFound())
                 .andReturn()
                 .getResponse()
