@@ -1,3 +1,3 @@
 export const commons = {
-  apiBasePath:'http://localhost:7777/'
+  apiBasePath:'//localhost:7777/'
 }

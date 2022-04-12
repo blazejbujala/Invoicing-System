@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Shared
 import spock.lang.Specification
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -19,6 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
+@WithMockUser
 @SpringBootTest
 @AutoConfigureMockMvc
 class InvoiceControllerTest extends Specification {
@@ -48,7 +52,7 @@ class InvoiceControllerTest extends Specification {
         def expected = "[]"
 
         when:
-        def result = mockMvc.perform(get("/invoices"))
+        def result = mockMvc.perform(get("/invoices").with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -63,7 +67,8 @@ class InvoiceControllerTest extends Specification {
         def invoiceAsJson = jsonService.toJson(invoice1)
 
         when:
-        def result = mockMvc.perform(post("/invoices").content(invoiceAsJson).contentType(MediaType.APPLICATION_JSON_VALUE))
+        def result = mockMvc.perform(post("/invoices")
+                .content(invoiceAsJson).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -84,17 +89,17 @@ class InvoiceControllerTest extends Specification {
         def invoiceAsJson3 = jsonService.toJson(invoice3)
 
         when:
-        mockMvc.perform(post("/invoices").content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE))
-        def postedInvoice2 = mockMvc.perform(post("/invoices").content(invoiceAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/invoices").content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        def postedInvoice2 = mockMvc.perform(post("/invoices").content(invoiceAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
-        mockMvc.perform(post("/invoices").content(invoiceAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/invoices").content(invoiceAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
         def addedInvoice2 = jsonService.toObject(postedInvoice2, Invoice.class)
         def id = addedInvoice2.getInvoiceId()
         invoice2.setInvoiceId(id)
-        def result = mockMvc.perform(get("/invoices/" + id))
+        def result = mockMvc.perform(get("/invoices/" + id).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -113,10 +118,10 @@ class InvoiceControllerTest extends Specification {
         def invoiceAsJson3 = jsonService.toJson(invoice3)
 
         when:
-        mockMvc.perform(post("/invoices").content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE))
-        mockMvc.perform(post("/invoices").content(invoiceAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE))
-        mockMvc.perform(post("/invoices").content(invoiceAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE))
-        def result = mockMvc.perform(get("/invoices"))
+        mockMvc.perform(post("/invoices").content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        mockMvc.perform(post("/invoices").content(invoiceAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        mockMvc.perform(post("/invoices").content(invoiceAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        def result = mockMvc.perform(get("/invoices").with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -129,7 +134,7 @@ class InvoiceControllerTest extends Specification {
 
     def "should return short list of invoices"() {
         when:
-        def response = mockMvc.perform(get("/invoices/list"))
+        def response = mockMvc.perform(get("/invoices/list").with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .response
@@ -146,8 +151,8 @@ class InvoiceControllerTest extends Specification {
         def invoiceAsJson3 = jsonService.toJson(invoice3)
 
         when:
-        mockMvc.perform(post("/invoices").content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE))
-        def secondInvoice = mockMvc.perform(post("/invoices").content(invoiceAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/invoices").content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        def secondInvoice = mockMvc.perform(post("/invoices").content(invoiceAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -155,9 +160,9 @@ class InvoiceControllerTest extends Specification {
         def invoiceToBeDelated = jsonService.toObject(secondInvoice, Invoice.class)
         def id = invoiceToBeDelated.getInvoiceId()
         invoice2.setInvoiceId(id)
-        mockMvc.perform(post("/invoices").content(invoiceAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE))
-        mockMvc.perform(delete("/invoices/" + id))
-        def response = mockMvc.perform(get("/invoices"))
+        mockMvc.perform(post("/invoices").content(invoiceAsJson3).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        mockMvc.perform(delete("/invoices/" + id).with(csrf()))
+        def response = mockMvc.perform(get("/invoices").with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -175,7 +180,7 @@ class InvoiceControllerTest extends Specification {
 
         when:
         def postResponse = mockMvc.perform(
-                post("/invoices").content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON))
+                post("/invoices").content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON).with(csrf()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
@@ -184,14 +189,14 @@ class InvoiceControllerTest extends Specification {
         invoice1.setInvoiceId(id)
         UUID notInRepositoryId = UUID.randomUUID()
         def deleteResponse = mockMvc.perform(
-                delete("/invoices/" + notInRepositoryId))
+                delete("/invoices/" + notInRepositoryId).with(csrf()))
                 .andExpect(status().isNotFound())
                 .andReturn()
                 .response
                 .contentAsString
 
         def response = mockMvc.perform(
-                get("/invoices"))
+                get("/invoices").with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .response
@@ -211,14 +216,14 @@ class InvoiceControllerTest extends Specification {
 
         when:
         def postedInvoice = mockMvc.perform(post("/invoices")
-                .content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE))
+                .content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
         def id = jsonService.toObject(postedInvoice, Invoice.class).getInvoiceId()
         def receivedBody = mockMvc.perform(patch("/invoices/" + id)
-                .content(invoiceAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE))
+                .content(invoiceAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -237,11 +242,11 @@ class InvoiceControllerTest extends Specification {
 
         when:
         def postResponse = mockMvc.perform(
-                post("/invoices").content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON))
+                post("/invoices").content(invoiceAsJson1).contentType(MediaType.APPLICATION_JSON).with(csrf()))
                 .andExpect(status().isOk())
         UUID updatedId = UUID.randomUUID()
         def patchBody = mockMvc.perform(patch("/invoices/" + updatedId)
-                .content(invoiceAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE))
+                .content(invoiceAsJson2).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
                 .andExpect(status().isNotFound())
                 .andReturn()
                 .getResponse()

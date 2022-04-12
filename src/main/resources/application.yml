@@ -6,6 +6,10 @@ spring:
     active: jpa
   flyway:
     enabled: true
+  security:
+    user:
+      name: bb
+      password: Pass123
 
 logging:
   level:
@@ -17,3 +21,7 @@ logging:
 springdoc:
   swagger-ui:
     enabled: true
+
+invoicing-system:
+  csrf:
+    disable: true
