@@ -61,7 +61,7 @@ dependencies {
 }
 
 application {
-	mainClass = 'pl.futurecollars.invoicing.App'
+	mainClass = 'com.fc.invoicing.InvoicingSystemApplication'
 }
 
 checkstyle {

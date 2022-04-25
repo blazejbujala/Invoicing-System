@@ -6,9 +6,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL94Dialect
   datasource:
-    url: jdbc:postgresql://localhost:5432/invoicing-db
-    username: postgres
-    password: password
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:invoicing-db}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:password}
     driver-class-name: org.postgresql.Driver
 pl:
   fc:
