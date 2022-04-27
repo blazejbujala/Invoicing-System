@@ -8,6 +8,7 @@
     <th scope="col">Tax Identification Number</th>
     <th scope="col">Name</th>
     <th scope="col">Address</th>
+    <th scope="col">Action</th>
   </tr>
   </thead>
   <tbody>
@@ -16,6 +17,7 @@
     <td class="align-middle">{{company.taxIdentificationNumber}}</td>
     <td class="align-middle">{{company.name}}</td>
     <td class="align-middle">{{company.address}}</td>
+    <td class="align-midle">  <button class="btn btn-outline-danger" (click)="delete(company.companyId)"><fa-icon [icon]="faTrash"></fa-icon></button></td>
     <td class="text-center">
   </tr>
   </tbody>

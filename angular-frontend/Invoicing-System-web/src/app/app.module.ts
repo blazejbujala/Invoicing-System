@@ -15,6 +15,7 @@ import { InvoicePreviewComponent } from './components/invoice-preview/invoice-pr
 import { CompanyTaxReportComponent } from './components/company-tax-report/company-tax-report.component';
 import { InvoiceAddComponent } from './components/invoice-add/invoice-add.component';
 import { InvoiceEditComponent } from './components/invoice-edit/invoice-edit.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { InvoiceEditComponent } from './components/invoice-edit/invoice-edit.com
     ReactiveFormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

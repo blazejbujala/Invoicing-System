@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {CompanyService} from "../../services/company.service";
 import {CompanyDto} from "../../model/company.dto";
-import {Router} from "@angular/router";
 import {InvoiceModel} from "../../model/InvoiceModel";
 import {InvoiceService} from "../../services/invoice.service";
+import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import {Router} from "@angular/router";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-invoices-list',
@@ -12,8 +14,9 @@ import {InvoiceService} from "../../services/invoice.service";
 })
 export class InvoicesListComponent implements OnInit {
   invoices: Array<InvoiceModel> = []
+  faTrash = faTrash
 
-  constructor(private invoiceService: InvoiceService, private router: Router) {
+  constructor(private invoiceService: InvoiceService, private router: Router, private toastService: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -33,5 +36,15 @@ export class InvoicesListComponent implements OnInit {
   navigateToAddForm(){
     this.router.navigate(['invoices/new'])
   }
+
+    delete(id: string) {
+      this.invoiceService.delete(id).subscribe(data => {
+          this.toastService.success("Invoice deleted"),
+            this.router.navigate(['invoices'])
+        },
+        error => {
+          this.toastService.error("Something went wrong")
+        })
+    }
 
 }
