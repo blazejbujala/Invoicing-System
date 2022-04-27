@@ -7,6 +7,7 @@
     <th scope="col">Invoice Id</th>
     <th scope="col">Invoice Number</th>
     <th scope="col">Date of Issue</th>
+    <th scope="col">Action</th>
   </tr>
   </thead>
   <tbody>
@@ -15,6 +16,7 @@
     <td class="align-middle">{{invoice.invoiceId}}</td>
     <td class="align-middle">{{invoice.invoiceNumber}}</td>
     <td class="align-middle">{{invoice.dateOfIssue}}</td>
+    <td class="align-midle">  <button class="btn btn-outline-danger" (click)="delete(invoice.invoiceId)"><fa-icon [icon]="faTrash"></fa-icon></button></td>
     <td class="text-center">
   </tr>
   </tbody>
