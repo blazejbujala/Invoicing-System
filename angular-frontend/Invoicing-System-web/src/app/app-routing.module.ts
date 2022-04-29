@@ -11,7 +11,7 @@ import {InvoiceEditComponent} from "./components/invoice-edit/invoice-edit.compo
 
 const routes: Routes = [
   {
-    path: "companies",
+    path: 'companies',
     children: [
       {
         path: 'new',
@@ -28,7 +28,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: "invoices",
+    path: 'invoices',
     children: [
       {
         path: 'new',
