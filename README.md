@@ -1,11 +1,11 @@
-## Invoicing - System
+# Invoicing - System
 
-# Genral information
+## Genral information
 Project is an invoicing system for a company. 
 It includes database for all contractors of a company and invoices issued.
 System allowes to calculate tax for a company as well as generate full tax report for a company. 
 
-# Technologies
+## Technologies
 Project is cleated with : 
 Java 17
 Spring
