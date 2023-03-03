@@ -7,15 +7,16 @@ System allowes to calculate tax for a company as well as generate full tax repor
 
 ## Technologies
 Project is cleated with : 
-Java 17
-Spring
-JPA
-Hibernate
-Postgres
-Flyway - database migrations
-Groovy - for tests
-Spock
-Lombok
-Jacoco - tests coverage
-Angular 13
-Bootstrap
+Java 17, 
+Spring, 
+Gradle, 
+Lombok, 
+JPA, 
+Hibernate,
+Postgres, 
+Flyway - database migrations, 
+Groovy - for tests, 
+Spock, 
+Jacoco - tests coverage, 
+Angular 13,
+Bootstrap,
